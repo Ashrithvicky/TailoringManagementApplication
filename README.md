@@ -43,6 +43,31 @@ __tests__      Unit tests
 
 Add schema changes by appending to `MIGRATIONS` in `src/data/schema.ts`. Add a language by adding a file typed as `Translation` and registering it in `src/i18n/index.ts`.
 
+## Repository contents and fresh workspace setup
+
+The repository includes the application source, tests, configuration, `package-lock.json`, and required app assets. The lockfile lets a new workspace install the same dependency versions. App images and icons in `assets/` are part of the project and should be committed.
+
+`.gitignore` excludes local or generated files that should not be uploaded:
+
+- Installed dependencies and Expo caches/build output: `node_modules/`, `.expo/`, `dist/`, `web-build/`, and Metro health-check files.
+- Generated native projects: `android/`, `ios/`, and `.kotlin/`. Expo can regenerate these when needed.
+- Build and test output: `coverage/`, `.apk`/`.aab` files, and TypeScript build info.
+- Signing credentials and service configuration: keystores, signing keys/certificates, provisioning profiles, `google-services.json`, `GoogleService-Info.plist`, and `credentials.json`.
+- Local environment files (`.env` and `.env.*`), local SQLite database files, editor/tool settings (`.vscode/`, `.idea/`, `.claude/`), OS metadata, and package-manager debug logs.
+
+Ignoring a path does not remove it from Git if it was already committed. To stop tracking a previously committed file, remove it from the index separately, for example with `git rm --cached <path>`.
+
+After cloning or importing the repository, install the JavaScript packages from the lockfile and run checks:
+
+```bash
+npm ci
+npm test
+npm run typecheck
+npm run lint
+```
+
+`npm ci` downloads Expo SDK 58, React Native, Expo Router, SQLCipher-enabled `expo-sqlite`, and the other dependencies declared in `package-lock.json`. This app does not use or require a separate AI/ML model download. For a local Android build, install Android Studio and its Android SDK, then run `npx expo run:android`; the ignored native project is generated as part of the Expo workflow. Alternatively, an EAS cloud build needs an EAS account but not a local Android SDK.
+
 ## Run
 
 SQLCipher is not in Expo Go, so use a development build or APK.
